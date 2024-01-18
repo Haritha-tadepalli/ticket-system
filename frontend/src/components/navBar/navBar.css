@@ -1,0 +1,12 @@
+.navBar{
+    padding: 20px;
+    margin: 0px 40px;
+    position: fixed;
+    width: 100%;
+    /* height: 50vh; */
+}
+
+.FaHome{
+    margin-top: 20px;
+}
+
