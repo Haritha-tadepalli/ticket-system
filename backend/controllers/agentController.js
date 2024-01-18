@@ -11,7 +11,7 @@ const addTicket = async (req, res) => {
   }
 };
 
-// List all the authors
+// List all the tickets
 const listAllTickets = async (req, res) => {
   try {
     const tickets = await TicketService.listAllTickets();
