@@ -2,7 +2,11 @@ import React from "react";
 
 const TicketDisplay = () => {
     return(
-        <h1>Tickets created</h1>
+        <div className="ticketDisplay">
+            <h1>Tickets created</h1>
+        
+
+        </div>
     )
 }
 

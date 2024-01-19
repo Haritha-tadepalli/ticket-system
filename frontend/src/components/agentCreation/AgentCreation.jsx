@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import './agentCreation.css'
 import { useForm } from "react-hook-form";
+import axios from 'axios';
 
 const AgentCreation = () => {
 
   const [submit, setSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm();
 
@@ -12,61 +14,29 @@ const AgentCreation = () => {
     setValue(e.target.name, e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (formData) => {
+    try {
+      console.log("Triggering backend");
+      const response = await axios.post('http://localhost:3001/support-agents', formData);
+
+      console.log('Server response:', response.data);
+
       setSubmit(true);
 
       setTimeout(() => {
         setSubmit(false);
+        reset();
       }, 5000);
+    } catch (error) {
+      setErrorMessage(error.body);
+      console.log('Error submitting form:', error);
+      setTimeout(() => {
+        setErrorMessage(null);
+        reset();
+      }, 5000);
+    }
+  };
 
-      reset();
-      console.log(e);
-  }
-
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   email: "",
-  //   phone: "",
-  //   description: "",
-  // });
-
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({ ...prevData, [name]: value }));
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   try{
-  //       const response = fetch('http:',{
-  //           method: 'POST',
-  //           headers: {
-  //               'Content-Type': 'application/json',
-  //           },
-  //           body: JSON.stringify(formData),
-  //         });
-  //         if (response.ok) {
-  //           
-
-  //           setFormData({
-  //             name: "",
-  //             email: "",
-  //             phone: "",
-  //             description: "",
-  //           });
-
-  //           
-    
-  //           console.log("Form data submitted successfully");
-  //         } else {
-  //           console.error('Failed to submit form data:', response.statusText);
-  //         }
-  //       } catch (error) {
-  //         console.error('Error submitting form data:', error.message);
-  //       }
-  // };
 
   return (
     <div className="agentMain">
@@ -74,6 +44,12 @@ const AgentCreation = () => {
       {submit && (
         <div className="popup">
           <p>Agent Created Successfully</p>
+        </div>
+      )}
+      {errorMessage && (
+        <div className="popup">
+          <p>{errorMessage}</p>
+          Error in Agent Creation
         </div>
       )}
       
@@ -103,6 +79,23 @@ const AgentCreation = () => {
         />
         <span className="error">{errors.email?.message}</span>
       </label>
+
+      <label>
+          Phone Number*:
+          <input
+            type="tel"
+            name="phoneNumber"
+            {...register('phoneNumber', { 
+              required: 'Phone Number is required',
+              pattern: {
+                value: /^\d{10}$/, // Assuming a 10-digit phone number format
+                message: 'Invalid phone number format'
+              }
+            })}
+            onChange={handleChange}
+          />
+          <span className="error">{errors.phoneNumber?.message}</span>
+        </label>
 
       <label>
         Description*:

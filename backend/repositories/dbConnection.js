@@ -1,19 +1,25 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 
-const mongoURI = 'your-mongodb-uri';
+const mongoURI = 'mongodb://localhost:27017';
 // const dbName = 'your-database-name';
 
-const Client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+const Client = new MongoClient(mongoURI);
 
 async function connectToDB(){
 try {
     await Client.connect();
     console.log('Connected to MongoDB');
+    return Client;
 
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
   }
 }
 
-  module.exports = connectToDB;
+async function closeConnection() {
+    await Client.close();
+    console.log('MongoDB connection closed');
+  }
+  
+  module.exports = { connectToDB, closeConnection };

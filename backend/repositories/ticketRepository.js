@@ -1,13 +1,15 @@
 
-const connectToDB =  require('./dbConnection');
+const dbConnection =  require('./dbConnection');
 const dbName = 'ticket-system';
 
-const client = await connectToDB();
-
-const db = client.db(dbName);
 
 // Function to add Ticket
-const addTicket = async (db, ticketData) => {
+const addTicket = async (ticketData) => {
+
+    const client =  await dbConnection.connectToDB();
+
+    const db = client.db(dbName);
+
     const ticketCollection = db.collection('Ticket');
     try {
         ticketData.id = ticketCollection.length + 1;
@@ -17,20 +19,38 @@ const addTicket = async (db, ticketData) => {
     } catch (error) {
         throw new Error('Error creating ticket');
     }
+    finally {
+        if (client) {
+          await dbConnection.closeConnection();
+        }
+    }
 };
 
 // Function to retrieve all Ticket
-const listAllTickets = async (db) => {
+const listAllTickets = async () => {
+    console.log("Tiket Repository");
+    const client = await dbConnection.connectToDB();
+
+    const db = client.db(dbName);
     const ticketCollection = db.collection('Ticket');
     try {
         const tickets = await ticketCollection.find({}).toArray();
         return tickets;
     } catch (error) {
+        console.log(error);
         throw new Error('Error fetching tickets');
+    }
+    finally {
+        if (client) {
+          await dbConnection.closeConnection();
+        }
     }
 };
 
-const updateTicket = async (db, updatedTicket) => {
+const updateTicket = async (updatedTicket) => {
+    const client =  await dbConnection.connectToDB();
+
+    const db = client.db(dbName);
     const ticketCollection = db.collection("Ticket");
     try{
         const updatedDetails = {assingedTo : updatedTicket.assingedTo, status: updatedTicket.status};
@@ -39,6 +59,11 @@ const updateTicket = async (db, updatedTicket) => {
     }
     catch(error) {
         throw new Error('Error while updating ticket');
+    }
+    finally {
+        if (client) {
+          await dbConnection.closeConnection();
+        }
     }
 }
 

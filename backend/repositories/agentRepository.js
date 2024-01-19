@@ -1,13 +1,13 @@
 // Function to add Agent
 
-const connectToDB =  require('./dbConnection');
+const dbConnection =  require('./dbConnection');
 const dbName = 'ticket-system';
 
-const client = await connectToDB();
-
-const db = client.db(dbName);
-
 const addAgent = async (agentData) => {
+
+    const client =  await dbConnection.connectToDB();
+
+    const db = client.db(dbName);
 
     const agentCollection = db.collection('Agent');
 
@@ -19,9 +19,18 @@ const addAgent = async (agentData) => {
     } catch (error) {
         throw new Error('Error creating agent');
     }
+    finally {
+        if (client) {
+          await dbConnection.closeConnection();
+        }
+    }
 };
 
 const getAgents = async () => {
+
+    const client =  await dbConnection.connectToDB();
+
+    const db = client.db(dbName);
     
     const agentCollection = db.collection('Agent');
 
@@ -33,7 +42,11 @@ const getAgents = async () => {
     catch(error){
         throw new Error("Error getting number of agents");
     }
-
+    finally {
+        if (client) {
+          await dbConnection.closeConnection();
+        }
+    }
 }
 
 module.exports = {

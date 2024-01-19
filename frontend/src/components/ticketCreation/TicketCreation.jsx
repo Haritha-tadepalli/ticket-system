@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import './ticketCreation.css'
 import {useForm} from "react-hook-form";
+import axios from 'axios';
 
 const TicketCreation = () => {
   const [submit, setSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm();
 
@@ -11,16 +13,27 @@ const TicketCreation = () => {
     setValue(e.target.name, e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (formData) => {
+    try {
+      const response = await axios.post('http://localhost:3001/support-tickets', formData);
+
+      console.log('Server response:', response.data);
+
       setSubmit(true);
 
       setTimeout(() => {
         setSubmit(false);
+        reset();
       }, 5000);
-
-      reset();
-      console.log(e);
-  }
+    } catch (error) {
+      setErrorMessage(error.body);
+      console.error('Error submitting form:', error);
+      setTimeout(() => {
+        setErrorMessage(null);
+        reset();
+      }, 5000);
+    }
+  };
 
   return (
     <div className="ticketMain">
@@ -28,6 +41,12 @@ const TicketCreation = () => {
       {submit && (
         <div className="popup">
           <p>Ticket Submitted Successfully</p>
+        </div>
+      )}
+      {errorMessage && (
+        <div className="popup">
+          <p>{errorMessage}</p>
+          Error in ticket Creation
         </div>
       )}
       <form onSubmit={handleSubmit(onSubmit)} >
@@ -89,7 +108,6 @@ const TicketCreation = () => {
         Status:
         <select name="status" {...register('status', { required: 'Status is required' })} onChange={handleChange}>
           <option value="New">New</option>
-          <option value="Assigned">Assigned</option>
           <option value="Resolved">Resolved</option>
         </select>
         <span className="error">{errors.status?.message}</span>

@@ -18,6 +18,7 @@ const addTicket = async (ticketData) => {
 };
 
 const listAllTickets = async (query) => {
+    console.log("Ticket Service");
     try {
         const tickets = await TicketRepository.listAllTickets();
 
@@ -40,7 +41,7 @@ const listAllTickets = async (query) => {
 
         return res;
     } catch (error) {
-        throw new Error(`Failed to list authors: ${error.message}`);
+        throw new Error(`Failed to list tickets: ${error.message}`);
     }
 };
 
