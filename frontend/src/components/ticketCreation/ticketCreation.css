@@ -1,24 +1,39 @@
-/* 
+
 .ticketMain{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 5rem;
     size: 1.2rem;
+}
+
+.header{
+    margin: 3rem;
 }
 
 .ticketForm{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    margin: auto;
+    padding: 0 5rem;
     align-items: left;
-    margin-top: 2rem;
+    gap: 8px; 
+    max-width: 900px;
 }
 
-.ticketLable input, textarea, select{
-    margin-left: 3rem;
-    margin-top: 2rem;
-    font-size: 1rem;
-    border-radius: 5px;
-} */
+.ticketLable label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: large;
+  }
+  
+  .ticketLable input,
+  .ticketLable textarea,
+  .ticketLable select {
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    margin-left: 10px;
+    width: 100%;
+  }

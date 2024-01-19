@@ -88,6 +88,45 @@ button:hover{
     border: 1px solid wheat;
 }
 
+.popup{
+    border: white 1px solid;
+    box-shadow: 0 2px 6px white;
+    border-radius: 5px;
+    margin: 2rem;
+    text-align: center;
+    padding: 10px;
+    width: fit-content;
+    position: absolute;
+    top: 110px;
+    left: 60%;
+    z-index: 1000;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px; /* Adjust the maximum width as needed */
+  }
+  
+  label {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label input,
+  label textarea,
+  label select {
+    padding: 8px;
+    margin-top: 4px; /* Adjust the top margin as needed */
+    border-radius: 5px;
+  }
+  
+  .error {
+    color: rgb(60, 29, 29);
+    margin-top: 4px; /* Adjust the top margin as needed */
+  }
 
 /* ============= Media Queries (Medium Devices) ======================== */
 

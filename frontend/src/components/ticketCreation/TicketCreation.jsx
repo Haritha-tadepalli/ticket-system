@@ -1,114 +1,112 @@
 import React, { useState } from "react";
 import './ticketCreation.css'
+import {useForm} from "react-hook-form";
 
 const TicketCreation = () => {
   const [submit, setSubmit] = useState(false);
-  const [formData, setFormData] = useState({
-    topic: "",
-    description: "",
-    dateCreated: "",
-    severity: "",
-    type: "",
-    assignedTo: "",
-    status: "New", // Default value
-    resolvedOn: "",
-  });
+
+  const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setValue(e.target.name, e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmit(true);
-    console.log("Form data submitted:", formData);
-  };
+  const onSubmit = (e) => {
+      setSubmit(true);
+
+      setTimeout(() => {
+        setSubmit(false);
+      }, 5000);
+
+      reset();
+      console.log(e);
+  }
 
   return (
     <div className="ticketMain">
-      <h1>Create a new Ticket</h1>
-      <form onSubmit={handleSubmit} className="ticketForm">
-        <label className="ticketLable">
-          Topic:
-          <input
-            type="text"
-            name="topic"
-            value={formData.topic}
-            onChange={handleChange}
-          />
-        </label>
+      <h1 className="header">Create a new Ticket</h1>
+      {submit && (
+        <div className="popup">
+          <p>Ticket Submitted Successfully</p>
+        </div>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)} >
+      <label>
+        Topic*:
+        <input
+          type="text"
+          name="topic"
+          {...register('topic', { required: 'Topic is required' })}
+          onChange={handleChange}
+        />
+        <span className="error">{errors.topic?.message}</span>
+      </label>
 
-        <label className="ticketLable">
-          Description:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </label>
+      <label>
+        Description*:
+        <textarea
+          name="description"
+          {...register('description', { required: 'Description is required' })}
+          onChange={handleChange}
+        />
+        <span className="error">{errors.description?.message}</span>
+      </label>
 
-        <label className="ticketLable">
-          Date Created:
+      <label >
+        Date Created*:
+        <input
+          type="date"
+          name="dateCreated"
+          {...register('dateCreated', { required: 'Date Created is required' })}
+          onChange={handleChange}
+        />
+        <span className="error">{errors.dateCreated?.message}</span>
+      </label>
+
+      <label >
+        Severity*:
+        <input
+          type="text"
+          name="severity"
+          {...register('severity', { required: 'Severity is required' })}
+          onChange={handleChange}
+        />
+        <span className="error">{errors.severity?.message}</span>
+      </label>
+
+      <label >
+        Type*:
+        <input
+          type="text"
+          name="type"
+          {...register('type', { required: 'Type is required' })}
+          onChange={handleChange}
+        />
+        <span className="error">{errors.type?.message}</span>
+      </label>
+
+      <label >
+        Status:
+        <select name="status" {...register('status', { required: 'Status is required' })} onChange={handleChange}>
+          <option value="New">New</option>
+          <option value="Assigned">Assigned</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+        <span className="error">{errors.status?.message}</span>
+      </label>
+
+      {register('status') === 'Resolved' && (
+        <label>
+          Resolved On:
           <input
             type="date"
-            name="dateCreated"
-            value={formData.dateCreated}
+            name="resolvedOn"
+            {...register('resolvedOn', { required: 'Resolved On is required' })}
             onChange={handleChange}
           />
+          <span className="error">{errors.resolvedOn?.message}</span>
         </label>
-
-        <label className="ticketLable">
-          Severity:
-          <input
-            type="text"
-            name="severity"
-            value={formData.severity}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label className="ticketLable">
-          Type:
-          <input
-            type="text"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label className="ticketLable">
-          Assigned To:
-          <input
-            type="text"
-            name="assignedTo"
-            value={formData.assignedTo}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label className="ticketLable">
-          Status:
-          <select name="status" value={formData.status} onChange={handleChange}>
-            <option value="New">New</option>
-            <option value="Assigned">Assigned</option>
-            <option value="Resolved">Resolved</option>
-          </select>
-        </label>
-
-        {formData.status === "Resolved" && (
-          <label className="ticketLable">
-            Resolved On:
-            <input
-              type="date"
-              name="resolvedOn"
-              value={formData.resolvedOn}
-              onChange={handleChange}
-            />
-          </label>
-        )}
-
+      )}
         <button type="submit">Submit</button>
       </form>
     </div>

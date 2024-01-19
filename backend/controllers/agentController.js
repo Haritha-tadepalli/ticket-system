@@ -1,27 +1,16 @@
-const TicketService = require('../services/ticketService');
+const AgentService = require('../services/agentService');
 
-// Add a Ticket
-const addTicket = async (req, res) => {
+// Add an Agent
+const addAgent = async (req, res) => {
   try {
-    const { topic, description, dateCreated, severity, type, assignedTo, status, resolvedOn } = req.body;
-    const result = await TicketService.addTicket(topic, description, dateCreated, severity, type, assignedTo, status, resolvedOn);
+    const { name, email, phoneNumber, description } = req.body;
+    const result = await AgentService.addAgent(id, name, email, phoneNumber, description);
     res.status(201).json({ status: 'success', data: result });
   } catch (error) {
     res.status(400).json({ status: 'error', message: error.message });
   }
 };
 
-// List all the tickets
-const listAllTickets = async (req, res) => {
-  try {
-    const tickets = await TicketService.listAllTickets();
-    res.status(200).json({ status: 'success', data: tickets });
-  } catch (error) {
-    res.status(400).json({ status: 'error', message: error.message });
-  }
-};
-
 module.exports = {
-  addTicket,
-  listAllTickets,
+    addAgent,
 };
